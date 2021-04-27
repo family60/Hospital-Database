@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Doctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Office" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Patients" Relationship="Self.FK__Patient__DoctorI__2C3393D0" FromRole="Doctor" ToRole="Patient" />
+    <NavigationProperty Name="Visits" Relationship="Self.FK__Visits__DoctorId__286302EC" FromRole="Doctor" ToRole="Visits" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DOB" Type="DateTime" Precision="3" />
+    <Property Name="DoctorId" Type="Int32" />
+    <NavigationProperty Name="Doctor" Relationship="Self.FK__Patient__DoctorI__2C3393D0" FromRole="Patient" ToRole="Doctor" />
+    <NavigationProperty Name="Visits" Relationship="Self.FK__Visits__PatientI__2D27B809" FromRole="Patient" ToRole="Visits" />
+  </EntityType>
+  <EntityType Name="Visit">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DateOfVisit" Type="DateTime" Precision="3" />
+    <Property Name="Complaint" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DoctorId" Type="Int32" />
+    <Property Name="PatientId" Type="Int32" />
+    <NavigationProperty Name="Doctor" Relationship="Self.FK__Visits__DoctorId__286302EC" FromRole="Visits" ToRole="Doctor" />
+    <NavigationProperty Name="Patient" Relationship="Self.FK__Visits__PatientI__2D27B809" FromRole="Visits" ToRole="Patient" />
+  </EntityType>
+  <Association Name="FK__Patient__DoctorI__2C3393D0">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
+    <End Role="Patient" Type="Self.Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patient">
+        <PropertyRef Name="DoctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Visits__DoctorId__286302EC">
+    <End Role="Doctor" Type="Self.Doctor" Multiplicity="0..1" />
+    <End Role="Visits" Type="Self.Visit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Visits">
+        <PropertyRef Name="DoctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Visits__PatientI__2D27B809">
+    <End Role="Patient" Type="Self.Patient" Multiplicity="0..1" />
+    <End Role="Visits" Type="Self.Visit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Visits">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="HospitalContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+    <EntitySet Name="Patients" EntityType="Self.Patient" />
+    <EntitySet Name="Visits" EntityType="Self.Visit" />
+    <AssociationSet Name="FK__Patient__DoctorI__2C3393D0" Association="Self.FK__Patient__DoctorI__2C3393D0">
+      <End Role="Doctor" EntitySet="Doctors" />
+      <End Role="Patient" EntitySet="Patients" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Visits__DoctorId__286302EC" Association="Self.FK__Visits__DoctorId__286302EC">
+      <End Role="Doctor" EntitySet="Doctors" />
+      <End Role="Visits" EntitySet="Visits" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Visits__PatientI__2D27B809" Association="Self.FK__Visits__PatientI__2D27B809">
+      <End Role="Patient" EntitySet="Patients" />
+      <End Role="Visits" EntitySet="Visits" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
